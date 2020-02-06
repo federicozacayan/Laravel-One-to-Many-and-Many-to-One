@@ -1,0 +1,116 @@
+<!DOCTYPE html><html lang="en"><head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Laravel One to Many - Many to One">
+  <title>Laravel One to Many - Many to One</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+  <link href="https://federicozacayan.github.io/tutorial/css/prism.css" rel="stylesheet">
+<style>
+p {
+    margin: 0;
+}
+</style>
+<style>textarea {
+  width: 100%;
+  margin: .5rem auto; }
+
+.buttons button {
+  cursor: pointer;
+  background-color: #00b7ff;
+  padding: .5rem;
+  margin: .5rem;
+  border-radius: 1rem;
+  color: white;
+  text-transform: capitalize;
+  display: inline-block;
+  width: auto; }
+
+button {
+  width: 50%; }
+
+.styler {
+  position: fixed;
+  top: 0;
+  right: 0;
+  padding: 1rem; }
+  .styler .background {
+    position: fixed;
+    background-color: #000;
+    opacity: .5;
+    height: 200px;
+    top: 0;
+    margin-left: -1rem;
+    float: left;
+    width: 100%;
+    z-index: -1;
+    height: 100vh; }
+</style></head>
+
+<body>
+  <noscript>You need to enable JavaScript to run this app.</noscript>
+  <div id="root"><div class="container"><div><div><h1>Laravel One to Many - Many to One</h1><p>Check the official documentation: https://laravel.com/docs/6.x/eloquent-relationships</p><pre class="  language-javascript"><code class="  language-javascript">php artisan make<span class="token punctuation">:</span>migration create_customer_table <span class="token operator">--</span>create<span class="token operator">=</span>customers</code></pre><pre class="  language-javascript"><code class="  language-javascript">php artisan make<span class="token punctuation">:</span>migration create_mobile_table <span class="token operator">--</span>create<span class="token operator">=</span>mobiles</code></pre><p>Customer migration.</p><pre class="  language-javascript"><code class="  language-javascript">$table<span class="token operator">-</span><span class="token operator">&gt;</span><span class="token function">string</span><span class="token punctuation">(</span><span class="token string">'name'</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre><p>Mobile migration.</p><pre class="  language-javascript"><code class="  language-javascript">$table<span class="token operator">-</span><span class="token operator">&gt;</span><span class="token function">integer</span><span class="token punctuation">(</span><span class="token string">'number'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+$table<span class="token operator">-</span><span class="token operator">&gt;</span><span class="token function">integer</span><span class="token punctuation">(</span><span class="token string">'customer_id'</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre><p>Run the migrations.</p><pre class="  language-html"><code class="  language-html">php artisan migrate</code></pre><p>Create Customer model.</p><pre class="  language-javascript"><code class="  language-javascript">php artisan make<span class="token punctuation">:</span>model Customer</code></pre><p>Create Mobile model.</p><pre class="  language-javascript"><code class="  language-javascript">php artisan make<span class="token punctuation">:</span>model Mobile</code></pre><p>Edit Customer Model.</p><pre class="  language-javascript"><code class="  language-javascript"><span class="token operator">&lt;</span><span class="token operator">?</span>php
+namespace App<span class="token punctuation">;</span>
+use Illuminate\Database\Eloquent\Model<span class="token punctuation">;</span>
+<span class="token keyword">class</span> <span class="token class-name">Customer</span> <span class="token keyword">extends</span> <span class="token class-name">Model</span>
+<span class="token punctuation">{</span>
+    <span class="token keyword">function</span> <span class="token function">mobiles</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+        <span class="token keyword">return</span> $<span class="token keyword">this</span><span class="token operator">-</span><span class="token operator">&gt;</span><span class="token function">hasMany</span><span class="token punctuation">(</span><span class="token string">'App\Mobile'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span></code></pre><p>Create data for testing purposes.</p><pre class="  language-html"><code class="  language-html">php artisan tinker</code></pre><pre class="  language-javascript"><code class="  language-javascript"><span class="token constant">DB</span><span class="token punctuation">:</span><span class="token punctuation">:</span><span class="token function">table</span><span class="token punctuation">(</span><span class="token string">'customers'</span><span class="token punctuation">)</span><span class="token operator">-</span><span class="token operator">&gt;</span><span class="token function">insert</span><span class="token punctuation">(</span><span class="token punctuation">[</span>
+    <span class="token string">'name'</span><span class="token operator">=&gt;</span><span class="token string">'Jhon'</span><span class="token punctuation">,</span>  <span class="token comment">//check it out</span>
+    <span class="token string">'created_at'</span><span class="token operator">=&gt;</span><span class="token keyword">new</span> <span class="token class-name">DateTime</span><span class="token punctuation">,</span> 
+    <span class="token string">'updated_at'</span><span class="token operator">=&gt;</span><span class="token keyword">new</span> <span class="token class-name">DateTime</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre><p>Create Mobiles.</p><pre class="  language-javascript"><code class="  language-javascript"><span class="token constant">DB</span><span class="token punctuation">:</span><span class="token punctuation">:</span><span class="token function">table</span><span class="token punctuation">(</span><span class="token string">'mobiles'</span><span class="token punctuation">)</span><span class="token operator">-</span><span class="token operator">&gt;</span><span class="token function">insert</span><span class="token punctuation">(</span><span class="token punctuation">[</span>
+    <span class="token string">'number'</span><span class="token operator">=&gt;</span><span class="token string">'123456789'</span><span class="token punctuation">,</span> 
+    <span class="token string">'customer_id'</span><span class="token operator">=&gt;</span><span class="token string">'1'</span><span class="token punctuation">,</span>  <span class="token comment">//check it out</span>
+    <span class="token string">'created_at'</span><span class="token operator">=&gt;</span><span class="token keyword">new</span> <span class="token class-name">DateTime</span><span class="token punctuation">,</span> 
+    <span class="token string">'updated_at'</span><span class="token operator">=&gt;</span><span class="token keyword">new</span> <span class="token class-name">DateTime</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre><pre class="  language-javascript"><code class="  language-javascript"><span class="token constant">DB</span><span class="token punctuation">:</span><span class="token punctuation">:</span><span class="token function">table</span><span class="token punctuation">(</span><span class="token string">'mobiles'</span><span class="token punctuation">)</span><span class="token operator">-</span><span class="token operator">&gt;</span><span class="token function">insert</span><span class="token punctuation">(</span><span class="token punctuation">[</span>
+    <span class="token string">'number'</span><span class="token operator">=&gt;</span><span class="token string">'987654321'</span><span class="token punctuation">,</span> 
+    <span class="token string">'customer_id'</span><span class="token operator">=&gt;</span><span class="token string">'1'</span><span class="token punctuation">,</span>  <span class="token comment">//check it out</span>
+    <span class="token string">'created_at'</span><span class="token operator">=&gt;</span><span class="token keyword">new</span> <span class="token class-name">DateTime</span><span class="token punctuation">,</span> 
+    <span class="token string">'updated_at'</span><span class="token operator">=&gt;</span><span class="token keyword">new</span> <span class="token class-name">DateTime</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre><p>Test the relationship from Customer.</p><pre class="  language-javascript"><code class="  language-javascript">php artisan tinker</code></pre><pre class="  language-javascript"><code class="  language-javascript">App\Customer<span class="token punctuation">:</span><span class="token punctuation">:</span><span class="token function">all</span><span class="token punctuation">(</span><span class="token punctuation">)</span></code></pre><pre class="  language-javascript"><code class="  language-javascript">App\Customer<span class="token punctuation">:</span><span class="token punctuation">:</span><span class="token function">find</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token operator">-</span><span class="token operator">&gt;</span>mobiles<span class="token punctuation">;</span></code></pre><pre class="  language-css"><code class="  language-css">&gt;&gt;&gt; App\<span class="token property">Customer</span><span class="token punctuation">:</span><span class="token punctuation">:</span><span class="token function">find</span><span class="token punctuation">(</span>1<span class="token punctuation">)</span>-&gt;mobiles<span class="token selector">;
+=&gt; Illuminate\Database\Eloquent\Collection</span> <span class="token punctuation">{</span><span class="token selector">#2962
+     all: [
+       App\Mobile</span> <span class="token punctuation">{</span>#2960
+         <span class="token property">id</span><span class="token punctuation">:</span> 1<span class="token punctuation">,</span>
+         <span class="token property">number</span><span class="token punctuation">:</span> 123456789<span class="token punctuation">,</span>
+         <span class="token property">customer_id</span><span class="token punctuation">:</span> 1<span class="token punctuation">,</span>
+         <span class="token property">created_at</span><span class="token punctuation">:</span> <span class="token string">"2020-02-05 23:39:02"</span><span class="token punctuation">,</span>
+         <span class="token property">updated_at</span><span class="token punctuation">:</span> <span class="token string">"2020-02-05 23:39:02"</span><span class="token punctuation">,</span>
+       <span class="token punctuation">}</span><span class="token selector">,
+       App\Mobile</span> <span class="token punctuation">{</span>#2961
+         <span class="token property">id</span><span class="token punctuation">:</span> 2<span class="token punctuation">,</span>
+         <span class="token property">number</span><span class="token punctuation">:</span> 987654321<span class="token punctuation">,</span>
+         <span class="token property">customer_id</span><span class="token punctuation">:</span> 1<span class="token punctuation">,</span>
+         <span class="token property">created_at</span><span class="token punctuation">:</span> <span class="token string">"2020-02-05 23:39:08"</span><span class="token punctuation">,</span>
+         <span class="token property">updated_at</span><span class="token punctuation">:</span> <span class="token string">"2020-02-05 23:39:08"</span><span class="token punctuation">,</span>
+       <span class="token punctuation">}</span><span class="token punctuation">,</span>
+     ]<span class="token punctuation">,</span>
+   <span class="token punctuation">}</span>
+&gt;&gt;&gt; </code></pre><p>Edit Mobile Model.</p><pre class="  language-javascript"><code class="  language-javascript"><span class="token operator">&lt;</span><span class="token operator">?</span>php
+namespace App<span class="token punctuation">;</span>
+use Illuminate\Database\Eloquent\Model<span class="token punctuation">;</span>
+<span class="token keyword">class</span> <span class="token class-name">Mobile</span> <span class="token keyword">extends</span> <span class="token class-name">Model</span>
+<span class="token punctuation">{</span>
+    <span class="token keyword">function</span> <span class="token function">customers</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">{</span>
+        <span class="token keyword">return</span> $<span class="token keyword">this</span><span class="token operator">-</span><span class="token operator">&gt;</span><span class="token function">belongsTo</span><span class="token punctuation">(</span><span class="token string">'App\Customer'</span><span class="token punctuation">,</span> <span class="token string">'customer_id'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre><p>Test the relationship from Mobile.</p><pre class="  language-javascript"><code class="  language-javascript">php artisan tinker</code></pre><pre class="  language-javascript"><code class="  language-javascript">App\Mobile<span class="token punctuation">:</span><span class="token punctuation">:</span><span class="token function">find</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token operator">-</span><span class="token operator">&gt;</span>customers<span class="token punctuation">;</span></code></pre><pre class="  language-css"><code class="  language-css">&gt;&gt;&gt; App\<span class="token property">Mobile</span><span class="token punctuation">:</span><span class="token punctuation">:</span><span class="token function">find</span><span class="token punctuation">(</span>1<span class="token punctuation">)</span>-&gt;customers<span class="token selector">;
+=&gt; App\Customer</span> <span class="token punctuation">{</span>#2960
+     <span class="token property">id</span><span class="token punctuation">:</span> 1<span class="token punctuation">,</span>
+     <span class="token property">name</span><span class="token punctuation">:</span> <span class="token string">"Jhon"</span><span class="token punctuation">,</span>
+     <span class="token property">created_at</span><span class="token punctuation">:</span> <span class="token string">"2020-02-05 23:38:15"</span><span class="token punctuation">,</span>
+     <span class="token property">updated_at</span><span class="token punctuation">:</span> <span class="token string">"2020-02-05 23:38:15"</span><span class="token punctuation">,</span>
+   <span class="token punctuation">}</span>
+&gt;&gt;&gt; </code></pre><p>That is all.</p></div><div class="styler" style="display: none;"><div class="background"></div><textarea style="margin-top: 8px; margin-bottom: 8px; height: 433px;">Laravel One to Many - Many to One</textarea><br><button>Duplicate</button><button>Delete</button><br><div class="buttons"><button>h1 </button><button>h2 </button><button>p </button><button>html </button><button>css </button><button>javascript </button><button>php </button></div><label for="up" class="btn btn-primary btn-block btn-outlined">Upload Json</label><input id="up" type="file" accept="text/plain" style="display: none;"><label for="down" class="btn btn-primary btn-block btn-outlined">Download Json</label><button id="down" style="display: none;">Export</button><label for="html" class="btn btn-primary btn-block btn-outlined">Download HTML</label><button id="html" style="display: none;">Export</button></div></div></div></div>
+<script src="/static/js/bundle.js"></script><script src="/static/js/0.chunk.js"></script><script src="/static/js/main.chunk.js"></script><script src="/main.5fbc4f5c566fd873bbba.hot-update.js"></script>
+<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+
+  <script src="https://federicozacayan.github.io/tutorial/js/prism.js"></script>
+
+
+
+</body></html>
